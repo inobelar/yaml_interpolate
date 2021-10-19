@@ -149,3 +149,11 @@ $ yaml_interpolate --input=input.yaml --output=stdout --formats=moustache | yq e
     - Commit [5eca8a30012b69b76316b71fa391a89fe09256cb](https://github.com/jarro2783/cxxopts/commit/5eca8a30012b69b76316b71fa391a89fe09256cb)
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp)
     - Commit [0d9dbcfe8c0df699aed8ae050dddaca614178fb1](https://github.com/jbeder/yaml-cpp/commit/0d9dbcfe8c0df699aed8ae050dddaca614178fb1)
+
+## Build
+
+```shell
+$ mkdir build
+$ cd build
+$ bash ../build.sh ../
+```
