@@ -129,7 +129,7 @@ Reading from `stdin` is also possible - to use this tool in a pipeline. For exam
 3. Extraction from `text` node: "`Hello, world!`"
 
 ```shell
-echo "{data: {str: world}, text: 'Hello, {{data.str}}!'}" | ./yaml_interpolate --input=stdin --output=stdout | yq eval '.text' -
+$ echo "{data: {str: world}, text: 'Hello, {{data.str}}!'}" | yaml_interpolate --input=stdin --output=stdout | yq eval '.text' -
 ```
 
 ## Limitations
