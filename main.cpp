@@ -210,47 +210,55 @@ int main(int argc, const char* argv[])
 
     try
     {
-        const YAML::Node config =
+        // Interpret input as multi-document (works for single-document too)
+        const std::vector<YAML::Node> documents =
                 (input_file_path == "stdin")
                 ?
-                    YAML::Load(std::cin)
+                    YAML::LoadAll(std::cin)
                 :
-                    YAML::LoadFile(input_file_path);
+                    YAML::LoadAllFromFile(input_file_path);
 
         // ---------------------------------------------------------------------
 
-        // Transform multiple times - on each pass called specific transform func
-        YAML::Node transformed = config; // no need to `YAML::Clone(config);` here
-        for(const auto& kv: transforms)
+        YAML::Emitter emitter;
+
+        // Process each 'document' independently
+        for(const YAML::Node& document : documents)
         {
-            transformed = transform_nodes_clone(transformed, kv.second);
-        }
-        /*
-            // Alternate (non-working) code, with single 'clone'. Dont works in
-            // cases with multiple transform patterns in single line.
-            YAML::Node transformed = YAML::Clone(config);
+            // Transform node multiple times - on each pass called specific transform func
+            YAML::Node transformed = document; // no need to `YAML::Clone(document);` here
             for(const auto& kv: transforms)
             {
-                transform_nodes(config, transformed, kv.second);
+                transformed = transform_nodes_clone(transformed, kv.second);
             }
-         */
+            /*
+                // Alternate (non-working) code, with single 'clone'. Dont works
+                // in cases with multiple transform patterns in single line.
+                YAML::Node transformed = YAML::Clone(document);
+                for(const auto& kv: transforms)
+                {
+                    transform_nodes(document, transformed, kv.second);
+                }
+             */
+
+            // Add processed document into output-emitter
+            emitter << transformed;
+        }
+
+        const char* output_str = emitter.c_str();
 
         // ---------------------------------------------------------------------
-
 
         if(output_file_path.empty() || (output_file_path == "stdout")) // Output to stdout
         {
-            std::cout << transformed << std::endl; // With extra trailing new-line
+            std::cout << output_str << std::endl; // With extra trailing new-line
         }
         else // Output to file
         {
             std::ofstream fout(output_file_path);
             if(fout.is_open())
             {
-                YAML::Emitter emitter;
-                emitter << transformed;
-
-                fout << emitter.c_str();
+                fout << output_str;
 
                 fout.close();
             }

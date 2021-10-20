@@ -137,6 +137,25 @@ constants:
 text: "[ {{constants.pi}}, %{constants.e}, ${constants.pi}, $[constants.e] ]"
 ```
 
+#### Multiple documents processing
+
+Multi-document processing supported - a YAML character stream may contain several documents. [Each document is completely independent from the rest](https://yaml.org/spec/1.2.2/#chapter-9-document-stream-productions).
+
+```yaml
+---
+name:  "Tomato"
+color: "red"
+text: "{{name}} is {{color}}" # <-- Interpolated value: "Tomato is red"
+---
+name: "Kiwi"
+color: "green"
+text: "{{name}} is {{color}}" # <-- Interpolated value: "Kiwi is green"
+---
+name:  "Blueberry"
+color: "blue"
+text: "{{name}} is {{color}}" # <-- Interpolated value: "Blueberry is blue"
+```
+
 #### Piping
 
 Piping is possible by redirecting output into `stdout` - for reading by another tool. For example - [redirecting](https://stackoverflow.com/a/59605210/) into [yq](https://mikefarah.gitbook.io/yq/) (analogue of [jq](https://stedolan.github.io/jq/)):
