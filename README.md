@@ -8,6 +8,30 @@ That tool is designed to process a single YAML file with both *template* and *da
 
 Written in C++11 (not in python or ruby, for example), since I find it hard to express logic without strong typing :)
 
+## Command-line options
+
+```text
+Usage:
+  ./yaml_interpolate [OPTION...]
+
+ I/O options:
+  -i, --input PATH   Input yaml file path (or 'stdin'). (required)
+  -o, --output PATH  Output file name (or 'stdout') (default: stdout)
+
+ Parsing settings options:
+      --formats LIST      Formats:
+                          moustache:      {{ variable.path }}
+                          double_dollar:  $variable.path$
+                          double_percent: %variable.path%
+                           (default: moustache)
+      --separator STRING  Separator between node names (default: .)
+      --regexps LIST      Regular expressions to find pattern
+                          Notice, that them must contain single capture group
+
+ Help options:
+      --help  Print this help
+```
+
 ## Example of usage
 
 ```shell
