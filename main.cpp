@@ -48,11 +48,11 @@ int main(int argc, const char* argv[])
 
         options.add_options("I/O")
             ("i,input",
-                "Input yaml file path (required)",
+                "Input yaml file path (or 'stdin'). (required)",
                 cxxopts::value<std::string>(),
                 "PATH")
             ("o,output",
-                "Output file name",
+                "Output file name (or 'stdout')",
                 cxxopts::value<std::string>()
                     ->default_value(output_file_path),
                 "PATH"
@@ -210,7 +210,12 @@ int main(int argc, const char* argv[])
 
     try
     {
-        const YAML::Node config = YAML::LoadFile(input_file_path);
+        const YAML::Node config =
+                (input_file_path == "stdin")
+                ?
+                    YAML::Load(std::cin)
+                :
+                    YAML::LoadFile(input_file_path);
 
         // ---------------------------------------------------------------------
 

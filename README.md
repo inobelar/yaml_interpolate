@@ -121,6 +121,17 @@ Piping is possible by redirecting output into `stdout` - for reading by another 
 $ yaml_interpolate --input=input.yaml --output=stdout --formats=moustache | yq eval '.some.field' -
 ```
 
+----
+
+Reading from `stdin` is also possible - to use this tool in a pipeline. For example:
+1. Passing [minified](https://onlineyamltools.com/minify-yaml) YAML string
+2. Processing by `yaml_interpolate`
+3. Extraction from `text` node: "`Hello, world!`"
+
+```shell
+echo "{data: {str: world}, text: 'Hello, {{data.str}}!'}" | ./yaml_interpolate --input=stdin --output=stdout | yq eval '.text' -
+```
+
 ## Limitations
 
 - You must always specify **full node path** - *relative* search not allowed, since [the content of a YAML file constitutes a `directed graph`, not a `tree`](https://stackoverflow.com/a/63579139/).
